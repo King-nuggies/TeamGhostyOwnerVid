@@ -1,0 +1,86 @@
+import discord
+from discord.ext import commands
+
+client = commands.Bot(command_prefix = '*')
+ 
+@client.event
+async def on_ready():
+  await client.change_presence(status=discord.Status.online, activity=discord.Game('UR_BOT_STATUS_HERE')) 
+  print('online')                               #choose between online/idle
+
+
+@client.command()
+async def hello(ctx):
+  await ctx.send("HI!")
+
+@client.command()
+async def website(ctx):
+  await ctx.send("http://teamghosty.ml")
+
+@client.command()
+async def commands(ctx):
+  await ctx.send("We are sorry but the Commands have not been listed yet. Please wait for them to be added.")
+
+@client.command()
+async def cmds(ctx):
+  await ctx.send("We are sorry but the Commands have not been listed yet. Please wait for them to be added.")
+
+
+@client.command()
+async def call(ctx):
+  await ctx.send("Im not da telephone! You are such a noob!!! XD")
+
+@client.command(aliases=['c'])
+async def clear(ctx, amount=1):
+  await ctx.channel.purge(limit = amount)
+
+@client.command()
+async def warn(ctx):
+ await ctx.send("Hey please dont pretend to be a mod we have logs for this server so if you get caught its game over. I will let you off this 1 chance but please don't do it again.")
+
+@client.command(aliases=['D'])
+async def clearall(ctx, amount=999999):
+  await ctx.channel.purge(limit = amount)
+
+
+class MyClient(discord.Client):
+
+    async def on_ready(self):
+        print('Logged on as', self.user)
+
+    async def on_message(self, message):
+        word_list = ['cheat', 'cheats', 'hack', 'hacks', 'internal', 'external', 'ddos', 'denial of service', 'fuck', 'shit', 'ur a hoor']
+
+        # don't respond to ourselves
+        if message.author == self.user:
+            return
+
+        messageContent = message.content
+        if len(messageContent) > 0:
+            for word in word_list:
+                if word in messageContent:
+                    await message.delete()
+                    await message.channel.send('Do not say that!')
+            
+        messageattachments = message.attachments
+        if len(messageattachments) > 0:
+            for attachment in messageattachments:
+                if attachment.filename.endswith(".dll"):
+                    await message.delete()
+                    await message.channel.send("No DLL's allowed!")
+                elif attachment.filename.endswith('.exe'):
+                    await message.delete()
+                    await message.channel.send("No EXE's allowed!")
+                elif attachment.filename.endswith('.dmg'):
+                    await message.delete()
+                    await message.channel.send("No DMG's allowed!")
+                elif attachment.filename.endswith('.png'):
+                    await message.delete()
+                    await message.channel.send("No PNG's allowed!")
+                else:
+                    break
+
+client = MyClient()
+
+client.run('UR_TOKEN_GOES_HERE') 
+
